@@ -24,14 +24,19 @@ le = preprocessing.LabelEncoder()
 le.fit(labels_train)
 labels_train = le.transform(labels_train)
 labels_test = le.transform(labels_test)
+print "Label encoding completed."
 pdb.set_trace()
 
 vectorizer = TfidfVectorizer(encoding="ISO-8859-1")
 features_train_transformed = vectorizer.fit_transform(features_train).toarray()
 features_test_transformed  = vectorizer.transform(features_test).toarray()
+print "Feature vectorization completed."
 pdb.set_trace()
+
+
 gnb = GaussianNB()
 gnb.fit(features_train_transformed, labels_train)
+print "Classifier training complete."
 predicted = gnb.predict(features_test_transformed)
 
 print(accuracy_score(predicted, labels_test))
