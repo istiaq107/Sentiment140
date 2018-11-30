@@ -1,29 +1,34 @@
 import pdb
 import csv
+import re
 import numpy as np
 import pandas as pd
 
-from sklearn import preprocessing
-from sklearn import model_selection
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
-with open("sample.csv", "r") as file:
-    data = np.array(list(csv.reader(file)))
-print "Data acquired."
+def drop_features(features,data):
+    data.drop(features,inplace=True,axis=1)
 
-features_train, features_test, labels_train, labels_test = model_selection.train_test_split(data[:, 5], data[:, 0], test_size=0.1, random_state=42)
-print "Features and labels split into training and testing sets."
+def process_tweet(tweet):
+    return " ".join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])", " ",tweet.lower()).split())
 
-# features_train, features_test, labels_train, labels_test = features_train[:32000], features_test[:32000], labels_train[:32000], labels_test[:32000]
-# print "Testing and training sets reduced in size."
+train_data = pd.read_csv("train.csv")
+print "data acquired."
+train_data['SentimentText'] = train_data['SentimentText'].apply(process_tweet)
+drop_features(['ItemID'],train_data)
+print "data cleaned."
 
-le = preprocessing.LabelEncoder()
-le.fit(labels_train)
-labels_train = le.transform(labels_train)
-labels_test = le.transform(labels_test)
-print "Label encoding completed."
+features_train, features_test, labels_train, labels_test = train_test_split(train_data['SentimentText'], train_data['Sentiment'], test_size=0.2, random_state=42)
+print "features and labels split into training and testing sets."
+
+count_vect = CountVectorizer(stop_words='english', encoding="ISO-8859-1")
+transformer = TfidfTransformer(norm='l2',sublinear_tf=True)
+features_count = count_vect.fit_transform(features_train)
+features_tfidf = transformer.fit_transform(features_count)
+pdb.set_trace()
 
 
 vectorizer = TfidfVectorizer(encoding="ISO-8859-1")
