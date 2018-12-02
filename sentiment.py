@@ -17,7 +17,7 @@ def process_tweet(tweet):
 
 train_data = pd.read_csv("train.csv")
 print "data acquired."
-train_data['SentimentText'] = train_data['SentimentText'].apply(process_tweet)
+train_data['CleanedSentimentText'] = train_data['SentimentText'].apply(process_tweet)
 drop_features(['ItemID'],train_data)
 print "data cleaned."
 
@@ -26,20 +26,17 @@ print "features and labels split into training and testing sets."
 
 count_vect = CountVectorizer(stop_words='english', encoding="ISO-8859-1")
 transformer = TfidfTransformer(norm='l2',sublinear_tf=True)
-features_count = count_vect.fit_transform(features_train)
-features_tfidf = transformer.fit_transform(features_count)
-pdb.set_trace()
 
+features_train_count = count_vect.fit_transform(features_train)
+features_train_tfidf = transformer.fit_transform(features_train_count)
 
-vectorizer = TfidfVectorizer(encoding="ISO-8859-1")
-features_train_transformed = vectorizer.fit_transform(features_train).toarray()
-features_test_transformed  = vectorizer.transform(features_test).toarray()
-print "Feature vectorization completed."
-
+features_test_count = count_vect.fit_transform(features_test)
+features_test_tfidf = transformer.fit_transform(features_test_count)
+print "Features vectorized"
 
 gnb = GaussianNB()
-gnb.fit(features_train_transformed, labels_train)
+gnb.fit(features_train_tfidf, labels_train)
 print "Classifier training complete."
-predicted = gnb.predict(features_test_transformed)
+predicted = gnb.predict(features_test_tfidf)
 
 print "Accuracy Score: ", accuracy_score(predicted, labels_test)
