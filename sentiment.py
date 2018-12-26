@@ -14,7 +14,6 @@ def preprocess_tweets(tweet):
     return " ".join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])", " ",tweet.lower()).split())
 
 train_data = pd.read_csv("data.csv")
-train_data = train_data[:15000]
 print "data acquired."
 train_data['tweet'] = train_data['tweet'].apply(preprocess_tweets)
 train_data.drop('id', inplace=True, axis=1)
