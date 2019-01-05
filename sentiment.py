@@ -1,10 +1,10 @@
 import pdb
 import csv
 import re
-import nltk
 import string
 import pandas as pd
 
+from sklearn.externals import joblib
 from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import ComplementNB
 from sklearn.model_selection import train_test_split
@@ -22,7 +22,7 @@ def preprocess_tweets(tweet):
     tweet = re.sub(r'[' + string.punctuation.replace('@', '') + ']+', ' ', tweet)
     tweet = re.sub(r'\b\w{1,2}\b', '', tweet)
     tweet = re.sub(r'\s\s+', ' ', tweet)
-    tweet = [char for char in list(tweet) if char not in punctuation]
+    tweet = [char for char in list(tweet) if char not in string.punctuation]
     tweet = ''.join(tweet)
     tweet = tweet.lstrip(' ') 
     return tweet
@@ -43,9 +43,12 @@ features_test_tfidf = Vectorizer.transform(features_test)
 print "features vectorized"
 
 
-########### Classifier Fitting ###########
+########### Classifier Fitting/Dumping ###########
 clf = ComplementNB()
 clf.fit(features_train_tfidf, labels_train)
+
+joblib.dump(clf, "sentiment.sav")
+joblib.dump(Vectorizer, "vectorizer.sav")
 
 
 ########### Prediction ###########
