@@ -35,3 +35,12 @@ run the following commands(everything's in Python2.7):
 
 The debugger is activated, and to test, pass the text as an input parameter to the function `predict`. If it returns 0, it means negative,
 if 1, positive.
+
+
+## References
+
+1.https://medium.com/coinmonks/solving-twitter-sentiment-analysis-problem-on-analytics-vidhya-ea3e51eea521
+
+2.https://towardsdatascience.com/the-real-world-as-seen-on-twitter-sentiment-analysis-part-one-5ac2d06b63fb
+
+3.https://towardsdatascience.com/the-real-world-as-seen-on-twitter-sentiment-analysis-part-two-3ed2670f927d
