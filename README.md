@@ -33,8 +33,7 @@ run the following commands(everything's in Python2.7):
 
 3.`python sentiment_test.py`
 
-The debugger is activated, and to test, pass the text as an input parameter to the function `predict`. If it returns 0, it means negative,
-if 1, positive.
+The debugger is activated, and to test, pass the text string as an input parameter to the function `predict`. If it returns 0, it means negative, if 1, positive.
 
 
 ## References
